@@ -1,0 +1,85 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.input {
+  border: 1px solid #CCC;
+  border-radius: 10px;
+  background: #fff;
+  width: 30rem;
+  height: 1.7rem;
+  display: flex;
+  align-items: center;
+  box-shadow:  0 1px 6px 0 #20212447;
+
+  @media screen and (max-width: 768px)  {
+    width: 100%;
+  }
+
+  input {
+    width: 100%;
+    border: none;
+    background: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  label {
+    margin: 5px 2px 0 10px;
+  }
+}
+
+.buttonSearch {
+  margin-top: 1.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #2DA44E;
+  color: #FFF;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.buttonDisable {
+  background: #CCC;
+}
+
+.userContainer {
+  padding: 1rem;
+
+  @media screen and (min-width: 998px) {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.user { 
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-bottom: 2rem;
+
+  img {
+    margin-right: 1rem;
+    border-radius: 100%;
+  }
+
+  button {
+    text-decoration: none;
+    color: #FFF;
+    background: #000;
+    padding: 0.3rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}
+
+.emptyMessage {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #CCC;
+}
