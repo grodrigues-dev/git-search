@@ -36,7 +36,7 @@ export const ModalContent = styled.p`
     font-family: Arial;
 `;
 
-export const Button = styled.button`
+export const Button = styled.a`
     text-decoration: none;
     color: #FFF;
     background: #2DA44E;
@@ -48,6 +48,7 @@ export const Button = styled.button`
     padding: 0.5rem 2rem;
     border: none;
     box-shadow:  0 1px 6px 0 #20212447;
+    font-family: Arial;
 `
 const spin = keyframes`
     0% { transform: rotate(0deg); }

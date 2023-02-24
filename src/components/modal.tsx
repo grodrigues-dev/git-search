@@ -54,7 +54,7 @@ export default function Modal({
                         <ModalContent>Localização: {userDetails.location}</ModalContent>
                         <ModalContent>E-mail: {userDetails.login}</ModalContent>
                         <ModalContent>Repositórios Públicos: {userDetails.public_repos}</ModalContent>
-                        <Button>Visitar Perfil</Button>
+                        <Button href={userDetails.html_url}>Visitar Perfil</Button>
                     </>
                 }
                 {

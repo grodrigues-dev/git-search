@@ -5,11 +5,9 @@ export interface User {
     login: string;
 }
 
-export interface UserDetails {
+export interface UserDetails extends User {
     name: string;
-    login: string;
     location: string;
     email: string;
     public_repos: number;
-    avatar_url: string;
 }
