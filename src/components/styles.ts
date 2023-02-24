@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 
 export const ModalContainer = styled.div`
@@ -29,12 +29,12 @@ export const UserModal = styled.div`
         margin: 0.5rem;
         cursor: pointer;
     }
-`
+`;
 
 export const ModalContent = styled.p`
     text-align: center;
     font-family: Arial;
-`
+`;
 
 export const Button = styled.button`
     text-decoration: none;
@@ -49,3 +49,22 @@ export const Button = styled.button`
     border: none;
     box-shadow:  0 1px 6px 0 #20212447;
 `
+const spin = keyframes`
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+`;
+
+export const Loader = styled.div`
+    border: 16px solid #f3f3f3; 
+    border-top: 16px solid #212529; 
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: ${spin} 2s linear infinite;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    top: 25%;
+    left: 0;
+    right: 0;
+`;

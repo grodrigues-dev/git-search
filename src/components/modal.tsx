@@ -2,7 +2,7 @@ import { UserDetails } from '@/types';
 import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react'
-import { ModalContainer, ModalContent, UserModal, Button } from './styles'
+import { ModalContainer, ModalContent, UserModal, Button, Loader } from './styles'
 
 interface ModalProps {
     user: string;
@@ -15,10 +15,14 @@ export default function Modal({
 }: ModalProps) {
 
     const [userDetails, setUserDetails] = useState<UserDetails>();
+    const [showLoader, setshowLoader] = useState(true);
 
     useEffect(() => {
         axios.get(`https://api.github.com/users/${user}`).then((res) => {
             setUserDetails(res.data);
+            setTimeout(() => {
+                setshowLoader(false);
+            }, 1000);
         }).catch(() => {
             window.alert('Erro ao consultar detalhes do usuário');
             closeModal();
@@ -36,14 +40,14 @@ export default function Modal({
                     onClick={closeModal}
                 />
                 {
-                    userDetails &&
+                    (!showLoader && userDetails) &&
                     <>
                         <Image
                             src={userDetails.avatar_url}
                             alt={`${userDetails.login} avatar`}
                             width={100}
                             height={100}
-                            style={{ alignSelf: 'center', borderRadius: '100%'}}
+                            style={{ alignSelf: 'center', borderRadius: '100%' }}
                         />
                         <ModalContent>Nome: {userDetails.name}</ModalContent>
                         <ModalContent>Username: {userDetails.login}</ModalContent>
@@ -52,6 +56,9 @@ export default function Modal({
                         <ModalContent>Repositórios Públicos: {userDetails.public_repos}</ModalContent>
                         <Button>Visitar Perfil</Button>
                     </>
+                }
+                {
+                    showLoader && <Loader />
                 }
             </UserModal>
         </ModalContainer>

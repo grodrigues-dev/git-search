@@ -5,6 +5,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { User } from '@/types'
 import Modal from '@/components/modal';
+import { Loader, ModalContainer } from '@/components/styles';
 
 export default function Home() {
   const [search, setSearch] = useState('');
@@ -12,6 +13,7 @@ export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [userModal, setUserModal] = useState('');
+  const [showLoader, setShowLoader] = useState(false);
 
 
   const searchByEnter = (event: KeyboardEvent) => {
@@ -26,11 +28,14 @@ export default function Home() {
   }
 
   const handleSearch = () => {
+    setShowLoader(true);
     axios.get(`https://api.github.com/search/users?q=${search}`).then(res => {
       setEmptyMessage(Boolean(!res.data.items.length));
       setUsers(res.data.items);
     }).catch(() => {
       window.alert('erro ao consultar api');
+    }).finally(() => {
+      setShowLoader(false);
     })
   }
 
@@ -85,6 +90,12 @@ export default function Home() {
         }
         {
           showModal && <Modal user={userModal} closeModal={ () => setShowModal(false)}/>
+        }
+        {
+          showLoader && 
+          <ModalContainer>
+            <Loader></Loader>
+          </ModalContainer>
         }
       </main>
     </>
