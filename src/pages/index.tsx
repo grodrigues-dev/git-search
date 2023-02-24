@@ -30,6 +30,7 @@ export default function Home() {
 
   const handleSearch = (pageNumber = 1) => {
     setShowLoader(true);
+    setActualPage(pageNumber);
     axios.get(`https://api.github.com/search/users?q=${search}&page=${pageNumber}`).then(res => {
       setEmptyMessage(Boolean(!res.data.items.length));
       setUsers(res.data.items);
@@ -44,7 +45,6 @@ export default function Home() {
 
   const nextPage = (index: number) => {
     const pageNumber = actualPage + index;
-    setActualPage(pageNumber);
     handleSearch(pageNumber);
   }
 
