@@ -10,13 +10,19 @@ export default function Home() {
   const [search, setSearch] = useState('');
   const [emptyMessage, setEmptyMessage] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [userModal, setUserModal] = useState('');
 
 
   const searchByEnter = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && search) {
       handleSearch();
     }
+  }
+
+  const dispatchModal = (user: string) => {
+    setUserModal(user);
+    setShowModal(true);
   }
 
   const handleSearch = () => {
@@ -59,7 +65,7 @@ export default function Home() {
         <div className={styles.userContainer}>
           {users.map(user => {
             return (
-              <div className={styles.user}>
+              <div className={styles.user} key={user.login}>
                 <Image
                   src={user.avatar_url}
                   alt={`${user.login} avatar`}
@@ -68,7 +74,7 @@ export default function Home() {
                 />
                 <div>
                   <p>{user.login} | <a href={user.html_url}>link do perfil</a></p>
-                  <button>Detalhes do usuário</button>
+                  <button onClick={() => dispatchModal(user.login)}>Detalhes do usuário</button>
                 </div>
               </div>
             )
@@ -78,7 +84,7 @@ export default function Home() {
           emptyMessage && <h2 className={styles.emptyMessage}>Desculpe, não conseguimos localizar o usuário :/</h2>
         }
         {
-          showModal && <Modal />
+          showModal && <Modal user={userModal} closeModal={ () => setShowModal(false)}/>
         }
       </main>
     </>
