@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '@/styles/Home.module.scss'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { User } from '@/types'
 import Modal from '@/components/modal';
@@ -14,11 +14,12 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [userModal, setUserModal] = useState('');
   const [showLoader, setShowLoader] = useState(false);
-
+  const [pages, setPages] = useState(0);
+  const [actualPage, setActualPage] = useState(1);
 
   const searchByEnter = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && search) {
-      handleSearch();
+      handleSearch(1);
     }
   }
 
@@ -27,16 +28,24 @@ export default function Home() {
     setShowModal(true);
   }
 
-  const handleSearch = () => {
+  const handleSearch = (pageNumber = 1) => {
     setShowLoader(true);
-    axios.get(`https://api.github.com/search/users?q=${search}`).then(res => {
+    axios.get(`https://api.github.com/search/users?q=${search}&page=${pageNumber}`).then(res => {
       setEmptyMessage(Boolean(!res.data.items.length));
       setUsers(res.data.items);
+      const totalPages = Math.ceil(res.data.total_count / 30);
+      setPages(totalPages > 34 ? 34 : totalPages);
     }).catch(() => {
       window.alert('erro ao consultar api');
     }).finally(() => {
       setShowLoader(false);
     })
+  }
+
+  const nextPage = (index: number) => {
+    const pageNumber = actualPage + index;
+    setActualPage(pageNumber);
+    handleSearch(pageNumber);
   }
 
   return (
@@ -66,7 +75,7 @@ export default function Home() {
           </label>
           <input type="text" id='search' value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={(e: any) => searchByEnter(e)} />
         </div>
-        <button className={`${styles.buttonSearch} ${!search && styles.buttonDisable}`} onClick={handleSearch} disabled={!search}>Pesquisar</button>
+        <button className={`${styles.buttonSearch} ${!search && styles.buttonDisable}`} onClick={()=> handleSearch(1)} disabled={!search}>Pesquisar</button>
         <div className={styles.userContainer}>
           {users.map(user => {
             return (
@@ -86,13 +95,25 @@ export default function Home() {
           })}
         </div>
         {
+
+          users.length > 0 &&
+          <div className={styles.paginationContainer}>
+            <div>
+              <button style={{ background: actualPage === 1 ? '#CCC' : '#2DA44E' }} onClick={() => nextPage(-1)} disabled={actualPage === 1}> {'<'} </button>
+              <p>{actualPage}</p>
+              <button style={{ background: actualPage === pages ? '#CCC' : '#2DA44E' }} onClick={() => nextPage(1)} disabled={actualPage === pages}> {'>'} </button>
+            </div>
+            <p>Total de páginas: {pages} </p>
+          </div>
+        }
+        {
           emptyMessage && <h2 className={styles.emptyMessage}>Desculpe, não conseguimos localizar o usuário :/</h2>
         }
         {
-          showModal && <Modal user={userModal} closeModal={ () => setShowModal(false)}/>
+          showModal && <Modal user={userModal} closeModal={() => setShowModal(false)} />
         }
         {
-          showLoader && 
+          showLoader &&
           <ModalContainer>
             <Loader></Loader>
           </ModalContainer>
